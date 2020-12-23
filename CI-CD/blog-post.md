@@ -65,11 +65,11 @@ The following steps are for installations and running bash commands.
 
 If you look at the pull request on github, you should see the tests running: 
 
-[image]()
+![running tests](./images/image_1.png)
 
 You'll notice that github already knows the name of the workflow, the name of the job, and the trigger. Once completed, it should look like this:
 
-[image]
+![all checks have passed](./images/image_2.png)
 
 Can you spot a problem in the process? 
 
@@ -79,13 +79,15 @@ The first issue is that the **Merge pull request** button was already available 
 
 We can fix this in the repo settings by going to: Settings>Branches>Add Rule 
 
-[image]
+![branch settings](./images/image_3.png)
 
 Here we'll select **Require status checks to pass before merging** and check everything underneath it. You'll see all workflows that are required to enable merge - in our case we only have `build-test`. 
 
+![require status checks](./images/image_4.png)
+
 Under **Branch name pattern** add *main* and create the rule. And if you go back to the pull request page, you'll see that no pull requests can be merged before the tests pass, unless of course you have admin privileges. 
 
-[image]
+![cannot merge yet](./images/image_5.png)
 
 ### Merging after code review 
 
