@@ -18,8 +18,8 @@ The CI pipeline enables teamwork to progress smoothly by automating standards an
 The CD pipeline receives the tested and approved code. It confirms that all needed artifacts are being deployed to the right place.  Some examples: deploying a web application on a server, publishing a library to a package manager repository, or publishing a mobile app to the app store. 
 
 Automating these processes ensures two main things:
-The process happens fast and does not waste valuable time 
-The process is less error prone, because the CI/CD process is deterministic
+* The process happens fast and does not waste valuable time 
+* The process is less error prone, because the CI/CD process is deterministic
 
 Want to learn how teams speed up their development, integration and deployment processes? Ready to build a new CI/CD pipeline? Let’s go!
 
@@ -47,7 +47,9 @@ We'll build a CI/CD for a simple application, which you can clone [here](https:/
 Create a .github/workflows folder. We'll be adding our github actions within this folder. The actions are set in yaml files in a fairly straightforward structure that consists of three parts: 
 
 **name**: the name of the workflow, in our case `Test and Build`
+
 **on**: the trigger that starts the workflow when conditions are satisfied. In our case, we want the workflow to run when a pull request is created and pushed. We'll see examples of other triggers later in the tutorial. 
+
 **jobs**: the actual commands that run in the flow. These can be multiple jobs that run in parallel or jobs that are dependent on one another. In this example there is one job called `build-test`that runs only on ubuntu-latest OS. 
 
 
@@ -178,7 +180,7 @@ steps:
       token: ${{ secrets.CI_REPOSITORY_ACCESS_TOKEN }}
 ```
 
-We need to explicitly set the token so that we can do things that the default token, `secrets.GITHUB_TOKEN`, doesn't have permissions for. In our case, we'll want to push a change to main without a code review, so we need a token with admin privileges. We set this token in Settings>Secrets. 
+We need to explicitly set the token so that we can do things that the default token, `secrets.GITHUB_TOKEN`, doesn't have permissions for. In our case, we'll want to push a change to main without a code review, so we need a token with admin privileges. We set this token in Settings -> Secrets. 
 
 TODO: no picture? 
 
