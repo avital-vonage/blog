@@ -6,7 +6,7 @@
 2. [Adding a github workflow to your project](#adding-a-github-workflow-to-your-project)
 3. [Building a CI workflow with Github actions](#building-a-continuous-integration-workflow)
 4. [Building a CD workflow with Github actions](#building-a-continuous-deployment-workflow)
-5. [Optimizing the workflow](#optimizing-the-CI/CD-Flow)
+5. [Optimizing the workflow](@optimizing-the-CI/CD-Flow)
 6. [Modularizing the process](#modularizing-the-process)
 
 ## What is CI/CD? 
@@ -17,30 +17,22 @@ The CI pipeline enables teamwork to progress smoothly by automating standards an
 
 The CD pipeline receives the tested and approved code. It confirms that all needed artifacts are being deployed to the right place.  Some examples: deploying a web application on a server, publishing a library to a package manager repository, or publishing a mobile app to the app store. 
 
-Automating these processes ensures two main things:
-* The process happens fast and does not waste valuable time 
-* The process is less error prone, because the CI/CD process is deterministic
+Automating these processes ensures two important things: the process happens fast, and the process is a lot less error-prone.
 
 Want to learn how teams speed up their development, integration and deployment processes? Ready to build a new CI/CD pipeline? Let’s go!
 
-### The Skeleton of a CI/CD Flow
+### A basic CI/CD Flow
 
 1. Push a change to a feature branch.
 2. Create a Pull Request for this change
 3. The CI kicks in and runs the following:
-- Lint
-- Test
-- Build
-4. Once the CI finishes, it marks the PR as valid and a Code Review process begins
-5. When the PR is approved, the code is merged into master
-6. After the merge, the CD process kicks in and:
-- Runs linting on all of the code
-- Runs tests on all of the code
-- Bumps the version of the app and the libraries
-- Pushes the new version and tags the commit with the new version
-- Deploys the demo and publishes the npm package
+4. Lint, Test, Build
+5. Once the CI finishes, it marks the PR as valid and a Code Review process begins
+6. When the PR is approved, the code is merged into master
+6. After the merge, the CD process kicks in:
+7. Lint, Test, Bump version, Deploy 
 
-We'll build a CI/CD for a simple application, which you can clone [here](https://github.com/YonatanKra/company-repo)
+We'll build a CI/CD for a simple application, which you can clone [here](https://github.com/YonatanKra/company-repo). 
 
 ## Adding a Github Workflow to Your Project 
 
