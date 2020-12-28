@@ -1,12 +1,12 @@
 # Setting up CI/CD with Github Actions
 
  Continuous integration and continuous deployment are must-haves for organizations that wish to scale and deliver high quality software at a high velocity. This article walks you through the process of using github actions to build CI/CD flows.
-
-1. [What is CI/CD?](@what-is-ci/cd)
+ 
+1. [What is CI/CD?](#what-is-cicd)
 2. [Adding a github workflow to your project](#adding-a-github-workflow-to-your-project)
 3. [Building a CI workflow with Github actions](#building-a-continuous-integration-workflow)
 4. [Building a CD workflow with Github actions](#building-a-continuous-deployment-workflow)
-5. [Optimizing the workflow](@optimizing-the-CI/CD-Flow)
+5. [Optimizing the workflow](#optimizing-the-cicd-flow)
 6. [Modularizing the process](#modularizing-the-process)
 
 ## What is CI/CD? 
