@@ -53,7 +53,8 @@ Consider an API that you know receives 1000 calls per second on average, with a 
 
 If your software includes capabilities for **auto scaling**, ensure testing on additional instances once the limit is reached. 
 Test **redundancy** for regions and zones because remember, your cloud services will fail from time to time.
-**Security** in this context refers to application penetration testing, OSS testing (external libraries and APIs), and static analysis tools. Code reviews are crucial in this stage, and should be part of the software development life cycle. 
+**Security** in this context refers to application penetration testing, OSS testing (external libraries and APIs), and static analysis tools. 
+Code reviews are crucial in this stage, and should be part of the software development life cycle. 
 
 ## DevOps Discipline 
 
@@ -77,4 +78,4 @@ If you’ve followed all these steps, we can pretty much guarantee that you’re
 
 ## In Conclusion 
 
-What we presented above is an approach for a quality strategy that we feel is close to perfect, yet still attainable. While we haven’t implemented it fully for all of our services, specifically legacy code and inherited software, we can say with confidence that each layer has proven to make a significant difference. The huge team of SDETs and DevOps engineers at Vonage will vouch for that. It is a huge undertaking, but we encourage you to add one layer at a time, and hope that each layer brings you closer to your desired availability. 
+What we presented above is an approach for a quality strategy that we feel is close to perfect, yet still attainable. While we haven’t implemented it fully for all of our services, specifically legacy code and inherited software, we can say with confidence that each layer has proven to make a significant difference. The huge team of SDETs and DevOps engineers at Vonage will vouch for that. It is a huge undertaking, but we encourage you to gradually add one layer at a time, until you reach the coverage that is right for you. We hope this helped, and we hope that each layer brings you closer to your desired availability. 
