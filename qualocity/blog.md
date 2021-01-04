@@ -78,4 +78,6 @@ If you’ve followed all these steps, we can pretty much guarantee that you’re
 
 ## In Conclusion 
 
-What we presented above is an approach for a quality strategy that we feel is close to perfect, yet still attainable. While we haven’t implemented it fully for all of our services, specifically legacy code and inherited software, we can say with confidence that each layer has proven to make a significant difference. The huge team of SDETs and DevOps engineers at Vonage will vouch for that. It is a huge undertaking, but we encourage you to gradually add one layer at a time, until you reach the coverage that is right for you. We hope this helped, and we hope that each layer brings you closer to your desired availability. 
+What we presented above is an approach for a quality strategy that we feel is close to perfect, yet still attainable. While we haven’t implemented it fully for all of our services, specifically legacy code and inherited software, we can say with confidence that each layer has proven to make a significant difference. The huge team of SDETs and DevOps engineers at Vonage will vouch for that. It is a huge undertaking, but we encourage you to gradually add one layer at a time, until you reach the coverage that is right for you. 
+
+We hope this helped, and we hope this research brings you even closer to your desired availability. 
