@@ -14,19 +14,17 @@ But the world has changed. Not only are we facing an increase of fragmentation i
 All this to say, companies with month-long waterfall release cycles can no longer compete with the demand for features and innovation.  
 Companies that can’t deliver fast will be late to market. 
 
-## The Challenge 
+## The Layers 
 
 And yet, despite the need for speed, there is no point in rushing to production with only a few methods of outdated quality tests under our belt. Because if we keep doing things the way we have been for years, we’ll end up chasing our tails in a circle of quality issues and escalations, which isn’t fun for anyone.  Leaving us with these two critical factors: on the one hand, quality must improve. But we need the ability to consistently and consciously commit changes to production knowing we’ve done everything we can. 
 
 Seven years ago, we began to research additional methods to add to the two original layers, functional and load testing. During that time, we have steadily built up the quality and velocity approach that led us to 99.999% system availability, known colloquially as the “five nines.” 
 
-## The Layers
-
 Through research and experimentation, we created the process presented here, which is made up of three multi dimensional layers: 
 
 ![quality layers](./images/quality.png)
 
-### Coding discipline
+## Coding discipline
 
 It might seem obvious that proper code discipline is at the core of software quality. Testing begins here, in consistently following standards and procedures. 
 
@@ -50,9 +48,7 @@ For these, you’ll need to take a ride outside your comfort zone and think bigg
 Consider an API that you know receives 1000 calls per second on average, with a peak of 1200 at 10am and 3pm, and a low of 800 at 10pm. 
 
 - For **Load Testing** you’ll want to make 1000 calls every second over a period of 24 hours. 
-
 - In **Stress Tests** you’ll keep adding calls until you hit a failure. That’s your stress point. Decide what to do about it and try again. 
-
 - **Stability Tests** account for average usage over time. For an extended period of time, make 1200 calls per second at peak hours, 800 at low hours, and 1000 the rest of the time. This will ensure that you can stay stable under your average load. 
 
 If your software includes capabilities for **auto scaling**, ensure testing on additional instances once the limit is reached. 
@@ -66,9 +62,13 @@ Let it _soak_. Don’t fool yourself into believing that you’ve protected your
 ### Remember to be gradual with releases
 
 - Encourage **bug squashing** by the development team before going to staging   
+
 - Then try it on the **alpha** (internal) users before sharing with the *beta* (external) users. Those beta groups should represent small segments of your production base, in regards to instances and devices. 
+
 - Once the version is widely available, enable a **blue-green** deployment system, which alternates production and staging servers, and allows you to quickly fall back to a previous version if necessary. 
+
 - Monitor scrupulously; set up alerting and analyze the test data
+
 - Talk with your customer success teams and explore other sources of feedback, like on app stores, social media or community platforms. 
 
 
