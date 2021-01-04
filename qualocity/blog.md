@@ -22,7 +22,8 @@ Seven years ago, we began to research additional methods to add to the two origi
 
 ## The Layers
 
-Through research and trial and error, we created the process described in this diagram, which was made up of three multi dimensional layers: 
+Through research and experimentation, we created the process presented here, which is made up of three multi dimensional layers: 
+
 ![quality layers](./images/quality.png)
 
 ### Coding discipline
