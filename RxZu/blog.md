@@ -13,11 +13,24 @@ Some of the leading guidelines in the project are minimal, clean code and the ab
 * Ports, links got to start from some point.
 * Links, symbols of connectivity and continuity.
 * Labels, one might want to give a name to a link or even use it for links actions buttons
-* Custom, want to add your own entity? no problem.
+* Custom, want to add your entity? no problem.
+
+#### Why not use an existing library you're asking yourself
+After a long research we reached a very small number of candidates who are leaders in the industry that didn't stand up to a certain standard we defined:
+1. Angular support
+2. Easily extendable and customizable
+3. Lightweight
+4. Extensive support and community
+
+Sadly, all the libraries we found were either extremely heavy and included outdated dependencies such as Lodash, Backbone, etc...
+Wasn't open-sourced and didn't have any community around them.
+The implementation was outdated, no Typings, unfitting for Angular environment, and introduced lots of overhead and complexity for the simplest use case.
 
 #### Enough talking, let's code
 **RxZu currently only implements Angular as a rendering engine therefor all code examples are for Angular.**
-Let's start by creating a new Angular application
+
+![Alt Text](https://github.com/Vonage/rxzu/raw/main/assets/draganddropexample.gif)
+Let's start by creating a new Angular application, that will display a graph and have a drag n' drop interface to add more nodes.
 ```bash
 ng new rxzu-angular
 # wait for angular installation to finish
@@ -52,7 +65,7 @@ import { RxZuDiagramsModule } from '@rxzu/angular';
 export class AppModule {}
 ```
 
-Now let's create a cool stylish grid as our background
+Now let's create a cool stylish grid as our background, the draggable nodes and our action bar container
 `app.component.scss`
 ```scss
 .demo-diagram {
@@ -86,6 +99,54 @@ Now let's create a cool stylish grid as our background
     );
   background-size: 50px 50px;
 }
+
+.node-drag {
+  display: block;
+  cursor: grab;
+  background-color: white;
+  border-radius: 30px;
+  padding: 5px 15px;
+}
+
+.action-bar {
+  position: fixed;
+  width: 100%;
+  height: 40px;
+  z-index: 2000;
+  background-color: rgba(255, 255, 255, 0.4);
+  display: flex;
+  align-items: center;
+
+  * {
+    margin: 0 10px;
+  }
+}
+
+```
+
+Our html template
+`app.component.html`
+```html
+<div class="action-bar">
+  <div
+    *ngFor="let node of nodesLibrary"
+    class="node-drag"
+    draggable="true"
+    [attr.data-type]="node.type"
+    (dragstart)="onBlockDrag($event)"
+    [ngStyle]="{ 'background-color': node.color }"
+  >
+    {{ node.type }}
+  </div>
+</div>
+
+<ngdx-diagram
+  class="demo-diagram"
+  [model]="diagramModel"
+  (drop)="onBlockDropped($event)"
+  (dragover)="$event.preventDefault()"
+></ngdx-diagram>
+
 ```
 
 And for the last piece in the puzzle, create some nodes, ports, link them up and render it all.
@@ -97,42 +158,83 @@ import { DiagramModel, DefaultNodeModel } from '@rxzu/core';
 
 @Component({
   selector: 'app-root',
-  template: `<ngdx-diagram
-    class="demo-diagram"
-    [inverseZoom]="true"
-    [model]="diagramModel"
-  ></ngdx-diagram>`,
+  templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
   diagramModel: DiagramModel;
+  nodesDefaultDimensions = { height: 200, width: 200 };
+  nodesLibrary = [
+    { color: '#AFF8D8', type: 'greenish' },
+    { color: '#FFB5E8', type: 'pinkish' },
+    { color: '#85E3FF', type: 'blueish' },
+  ];
 
   constructor(private diagramEngine: DiagramEngine) {}
 
   ngOnInit() {
-    const nodesDefaultDimensions = { height: 200, width: 200 };
     this.diagramEngine.registerDefaultFactories();
-
     this.diagramModel = this.diagramEngine.createModel();
 
-    const node1 = new DefaultNodeModel();
+    const node1 = new DefaultNodeModel({ id: '1' });
     node1.setCoords({ x: 500, y: 300 });
-    node1.setDimensions(nodesDefaultDimensions);
-    const outport1 = node1.addOutPort({ name: 'outport1' });
+    node1.setDimensions(this.nodesDefaultDimensions);
+    node1.addOutPort({ name: 'outport1', id: 'outport1' });
+    node1.addOutPort({ name: 'outport2', id: 'outport2' });
+    const outport3 = node1.addOutPort({ name: 'outport3', id: 'outport3' });
 
     const node2 = new DefaultNodeModel();
     node2.setCoords({ x: 1000, y: 0 });
-    node2.setDimensions(nodesDefaultDimensions);
+    node2.setDimensions(this.nodesDefaultDimensions);
     const inport = node2.addInPort({ name: 'inport2' });
 
-    const link = outport1.link(inport);
+    const link = outport3.link(inport);
     link.setLocked();
 
     this.diagramModel.addAll(node1, node2, link);
-
     this.diagramModel.getDiagramEngine().zoomToFit();
   }
+
+  createNode(type: string) {
+    const nodeData = this.nodesLibrary.find((nodeLib) => nodeLib.type === type);
+    const node = new DefaultNodeModel({ color: nodeData.color });
+
+    node.setExtras(nodeData);
+    node.setDimensions(this.nodesDefaultDimensions);
+    node.addOutPort({ name: 'outport1', id: 'outport1' });
+    node.addOutPort({ name: 'outport2', id: 'outport2' });
+
+    return node;
+  }
+
+  /**
+   * On drag start, assign the desired properties to the dataTransfer
+   */
+  onBlockDrag(e: DragEvent) {
+    const type = (e.target as HTMLElement).getAttribute('data-type');
+    e.dataTransfer.setData('type', type);
+  }
+
+  /**
+   * on block dropped, create new intent with the empty data of the selected block type
+   */
+  onBlockDropped(e: DragEvent): void | undefined {
+    const nodeType = e.dataTransfer.getData('type');
+    const node = this.createNode(nodeType);
+    const droppedPoint = this.diagramEngine
+      .getMouseManager()
+      .getRelativePoint(e);
+
+    const coords = {
+      x: droppedPoint.x - this.nodesDefaultDimensions.width / 2,
+      y: droppedPoint.y - this.nodesDefaultDimensions.height / 2,
+    };
+
+    node.setCoords(coords);
+    this.diagramModel.addNode(node);
+  }
 }
+
 ```
 We want to believe the code is self explanatory, but i'll do a quick overview nevertheless.
 
