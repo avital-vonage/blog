@@ -25,11 +25,9 @@ The implementations we found were outdated, lacking Typings, unfitting for Angul
 
 So we created RxZu, named for Reactive Extensions ([RxJS](http://reactivex.io/)) and *Zu*, the Japanese word for illustration. 
 
-RxZu is a combination of Rx which is a shorthand for Reactive Extensions and in our specific case Reactive Extensions for Javascript also known as RxJS.
-Zu is the Japanese word for drawing, picture, diagram, figure, illustration, chart, graph.
-That leads us to an understanding that RxZu is a diagrams engine system, build on top of RxJS, which takes the idea of graphic visualization to the next level in terms of performance, optimization, and customizability.
+RxZu is a diagrams engine system, built on top of RxJS, that takes the  graphic visualization to the next level in terms of performance, optimization, and customizability.
 
-RxZu is composed of multiple parts, the core engine which is in charge of handling the models and the synchronization between them, and the rendering engine which is in charge of the, well, the rendering of course, and is based on the desired framework utilizing the core engine.
+RxZu is composed of multiple parts: the core engine, which is in charge of handling the models and the synchronization between them, and the rendering engine which handles the rendering, and is based on the desired framework utilizing the core engine.
 
 Some of the leading guidelines in the project are minimal, clean code and the ability for customizations and extendibility of the engine entities which are: 
 * Nodes, the main building block of any graph, are the visual representation of data intersections.
