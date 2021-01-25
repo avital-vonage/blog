@@ -23,7 +23,7 @@ The implementations we found were outdated, lacking Typings, unfitting for Angul
 
 ## Enter RxZu
 
-So we created RxZu, named for Reactive Extensions ([RxJS](link)) and *Zu*, the Japanese word for illustration. 
+So we created RxZu, named for Reactive Extensions ([RxJS](http://reactivex.io/)) and *Zu*, the Japanese word for illustration. 
 
 RxZu is a combination of Rx which is a shorthand for Reactive Extensions and in our specific case Reactive Extensions for Javascript also known as RxJS.
 Zu is the Japanese word for drawing, picture, diagram, figure, illustration, chart, graph.
