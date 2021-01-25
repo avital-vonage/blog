@@ -1,7 +1,27 @@
-## All we need is graph, graph is all we need
-Introducing RxZu, Vonage graphs engine.
+## Introducing RxZu, an engine for intuitive graphs
 
-#### First thing first, what is RxZu?
+In the beginning, it was linear. 
+We had in our hands an interface that allowed users to design conversations, all part of the Vonage AI studio, where [some blurb on the studio]
+But AI was the future, and forms, which our clients found unusable, were most definitely *not*. 
+
+## The Search for a Graphs Engine 
+
+We realized we needed a visual approach to simplify the already complex world of conversation design. Something clever, snazzy, intuitive. 
+And for that, we needed a graphs library that would satisfy some requirements:
+1. Angular support
+2. Lightweight
+3. Extendable and customizable
+4. Extensive support and community
+
+And what do you know? Our search yielded zero results. 
+The libraries we found were extremely heavy, and included outdated dependencies such as Lodash and Backbone. 
+The options we looked into were not open-sourced and lacked a community. 
+The implementations we found were outdated, lacking Typings, unfitting for Angular environment, and introduced endless complexity for the simplest use case.  
+
+## Enter RxZu
+
+So we created RxZu, named for Reactive Extensions ([RxJS](link)) and *Zu*, the Japanese word for illustration. 
+
 RxZu is a combination of Rx which is a shorthand for Reactive Extensions and in our specific case Reactive Extensions for Javascript also known as RxJS.
 Zu is the Japanese word for drawing, picture, diagram, figure, illustration, chart, graph.
 That leads us to an understanding that RxZu is a diagrams engine system, build on top of RxJS, which takes the idea of graphic visualization to the next level in terms of performance, optimization, and customizability.
