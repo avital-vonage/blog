@@ -36,17 +36,6 @@ Some of the leading guidelines in the project are minimal, clean code and the ab
 * Labels, one might want to give a name to a link or even use it for links actions buttons
 * Custom, want to add your entity? no problem.
 
-#### Why not use an existing library you're asking yourself
-After a long research we reached a very small number of candidates who are leaders in the industry that didn't stand up to a certain standard we defined:
-1. Angular support
-2. Easily extendable and customizable
-3. Lightweight
-4. Extensive support and community
-
-Sadly, all the libraries we found were either extremely heavy and included outdated dependencies such as Lodash, Backbone, etc...
-Wasn't open-sourced and didn't have any community around them.
-The implementation was outdated, no Typings, unfitting for Angular environment, and introduced lots of overhead and complexity for the simplest use case.
-
 #### Enough talking, let's code
 **RxZu currently only implements Angular as a rendering engine therefor all code examples are for Angular.**
 
