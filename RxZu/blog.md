@@ -1,8 +1,11 @@
-## Introducing RxZu, an engine for intuitive graphs
+# Introducing RxZu, an Engine for Intuitive Graphs
 
-In the beginning, it was linear. 
-We had in our hands an interface that allowed users to design conversations, all part of the Vonage AI studio, where [some blurb on the studio]
-But AI was the future, and forms, which our clients found unusable, were most definitely *not*. 
+In the beginning, all was linear. 
+
+We had in our hands an interface that allowed users to design conversations, entirely based on graphs. 
+This was part of the Vonage AI studio, where [some blurb on the studio]. The kicker? It was entirely based on forms. 
+
+But AI was the future, and forms, which our clients found unusable, most definitely were *not*. 
 
 ## The Search for a Graphs Engine 
 
