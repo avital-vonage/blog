@@ -23,8 +23,8 @@ Before we jump into how to implement these concepts, let's quickly understand wh
 
 **There are two key concepts to understand:**
 
-1. We should be able to aggregate all logs from all services for each request via tracing. 
-2. We should let our infrastructure deal with the tracing so that it doesn't interfere with our business logic. 
+1. Aggregate all logs from all services for each request via tracing
+2. Let the infrastructure deal with the tracing so that it doesn't interfere with the business logic
 
 So, how do we implement it? 
 
