@@ -24,7 +24,6 @@ Before we jump into how to implement these concepts, let's quickly understand wh
 **There are two key concepts to understand:**
 
 1. We should be able to aggregate all logs from all services for each request via tracing. 
-
 2. We should let our infrastructure deal with the tracing so that it doesn't interfere with our business logic. 
 
 So, how do we implement it? 
@@ -37,7 +36,7 @@ This concept is pretty straightforward. We need to follow two very simple rules:
 If two services communicate via http requests, we will add the trace ID to the headers of the request. This way, we can follow a single request through its entire flow without any noise of other requests or logs occurring in parallel.
 
 
-### Keeping business logic clean while gaining the full power of tracing
+### Separating business logic and infrastructure 
 
 Making sure we keep track of our tracing through every single pipe we receive or send data can require some good amount of coding. We always attempt to keep infrastructure concepts such as this as far away from our business logic as possible. Luckily, in our case, we can separate the tracing management almost entirely from our business logic. 
 
@@ -112,8 +111,10 @@ The entire flow will look something like this:
 
 ![diagram-2](./images/final-diagram.jpeg)
 
-Following these concepts will assure you won’t have to change any logging and existing code and that each request will have its entire flow presented to you without having to dig through a pile of unrelated logs.
+### In Conclusion 
 
-I can personally say, that in the services where we applied these concepts, the productivity and value we get when investigating our logs has skyrocketed. Since then, looking at logs in any other way just doesn’t feel right.
+Log tracing can be used in all sorts of contexts, but this particular use prevents a lot of headache when investigating errors. It ensures that the request logs of each flow are easily accessible, so that you don't need to dig through thousands of unrelated logs.
 
-I hope this has been helpful to you and that next time you need to quickly solve a production incident you will at least have your logs on your side.
+We can personally say that in the services where we applied these concepts, the efficiency and value experienced during log investigation has skyrocketed. Since then, sifting through logs in any other way just doesn’t feel right.
+
+So, next time there's a critical incident in production, and it's up to you to solve it, at least this time the logs will be on your side.
