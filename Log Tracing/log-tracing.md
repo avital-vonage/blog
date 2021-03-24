@@ -17,7 +17,7 @@ It’s an overwhelming journey that is inundated with hundreds of logs that are 
 
 ### What do you mean, log tracing? 
 
-Before we jump into how to implement these concepts, let's quickly understand what we are talking about when we say we want to trace our logs. Tracing usually means adding some identifier so we can aggregate our data by this identifier. As to what each id stands for is a matter of taste. We can have one trace ID that is added to all the data we have on a single request. We can also have another set of span ids which will be used in the context of one service.
+Before we jump into implementing these concepts, let's understand what we mean when we say we want to trace logs. Tracing usually means adding some identifier that can be used to aggregate data. The meaning of each ID is then a matter of taste. We can have one trace ID that is added to all the data in a single request. Or we can have a set of span IDs which will be used in the context of one service. The basic idea looks like this: 
 
 ![diagram-1](./images/first-diagram.jpeg)
 
@@ -66,7 +66,6 @@ function tracingMiddleware(req,res,next) {
 We use Express as our API infrastructure to implement express [middlewares](https://expressjs.com/en/guide/using-middleware.html) that intercept each request. We extract the trace ID from the request or create a new one if we are the first service in the chain. We then set the trace ID in a session storage tool so we can fetch each in every step of the way.
 
 Notice the `ns.set`. This is using [cls-hooked](https://www.npmjs.com/package/cls-hooked), a continuation local storage package that wraps node async hooks. It allows us to locally store the trace ID for every session. But if you're using Node 14, this functionality is already built in with [async local storage](https://nodejs.org/api/async_hooks.html#async_hooks_class_asynclocalstorage). What's cool about this method, though, is that it can be implemented in any language. 
-
 
 We then add an interceptor to the logging tool that grabs the trace ID from the session storage and adds it to every log line:
 
