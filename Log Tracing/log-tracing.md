@@ -44,6 +44,12 @@ In our code, we write logs for various events and errors while adding data to th
 
 The easiest way I can explain it is by showing an actual example from our own services. This example is from our nodejs services but can be implemented in any language.
 
+This is code from the service that receives http requests, writes several logs and then makes an http request to the next service. We can see here three places where we need to add interceptors to our tools: inbound request, logging and outbound request.
+
+
+We use Express as our API infrastructure to implement express [middlewares](https://expressjs.com/en/guide/using-middleware.html) that intercept each request. We extract the trace ID from the request or create a new one if we are the first service in the chain. We then set the trace ID in a session storage tool so we can fetch each in every step of the way.
+
+
 ```javascript
 function tracingMiddleware(req,res,next) {
     ns.run(() => {
@@ -60,11 +66,9 @@ function tracingMiddleware(req,res,next) {
 }
 ```
 
-This is code from the service that receives http requests, writes several logs and then makes an http request to the next service. We can see here three places where we need to add interceptors to our tools: inbound request, logging and outbound request.
 
 Notice the `ns.set`. This is using [cls-hooked](https://www.npmjs.com/package/cls-hooked), a continuation local storage package that wraps node async hooks. It allows us to locally store the trace ID for every session. But if you're using Node 14, this functionality is already built in with [async local storage](https://nodejs.org/api/async_hooks.html#async_hooks_class_asynclocalstorage). 
 
-We use Express as our API infrastructure to implement express [middlewares](https://expressjs.com/en/guide/using-middleware.html) that intercept each request. We extract the trace ID from the request or create a new one if we are the first service in the chain. We then set the trace ID in a session storage tool so we can fetch each in every step of the way.
 
 We then add an interceptor to our logging tool to add to every log line the race id from our session storage: 
 
