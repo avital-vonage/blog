@@ -38,16 +38,13 @@ If two services communicate via http requests, we will add the trace ID to the h
 
 ### Separating business logic and infrastructure 
 
-Making sure we keep track of our tracing through every single pipe we receive or send data can require some good amount of coding. We always attempt to keep infrastructure concepts such as this as far away from our business logic as possible. Luckily, in our case, we can separate the tracing management almost entirely from our business logic. 
+Ensuring that we can keep track of tracing through all sent or received data can require a good amount of coding. We always want to separate infrastructure concepts like this from the business logic as much as possible. Luckily, in our case, it is easy to split out the tracing management almost entirely. 
 
-In our code, we write logs for various events and errors while adding data to these logs. We want to keep these flows untouched and at the same time add our tracing to all of these logs. Most of the tools we use today allow us to add interceptors to each request they receive. If we make sure to add interceptors to any IO tool we use and to our logging tool, we are in the right way of making sure we will trace all of our logs without touching any of the existing code we have. 
+In our code, we write logs for various events and errors while adding data to these logs. We want to keep these flows untouched while adding our tracing to all the logs in parallel. Most of the tools we use today allow us to add interceptors to each request they receive. If we make sure to add interceptors to our IO tool and our logging tool, we are on the path to ensuring that all logs will be traced without touching any of the existing code. 
 
-The easiest way I can explain it is by showing an actual example from our own services. This example is from our nodejs services but can be implemented in any language.
+The easiest way to explain is by showing an actual example from our own services. 
 
-This is code from the service that receives http requests, writes several logs and then makes an http request to the next service. We can see here three places where we need to add interceptors to our tools: inbound request, logging and outbound request.
-
-
-We use Express as our API infrastructure to implement express [middlewares](https://expressjs.com/en/guide/using-middleware.html) that intercept each request. We extract the trace ID from the request or create a new one if we are the first service in the chain. We then set the trace ID in a session storage tool so we can fetch each in every step of the way.
+This code below from the nodejs service that receives http requests, writes several logs and then makes an http request to the next service. It is one of three places where we've placed interceptors: inbound request, logging and outbound request.
 
 
 ```javascript
@@ -66,11 +63,12 @@ function tracingMiddleware(req,res,next) {
 }
 ```
 
+We use Express as our API infrastructure to implement express [middlewares](https://expressjs.com/en/guide/using-middleware.html) that intercept each request. We extract the trace ID from the request or create a new one if we are the first service in the chain. We then set the trace ID in a session storage tool so we can fetch each in every step of the way.
 
-Notice the `ns.set`. This is using [cls-hooked](https://www.npmjs.com/package/cls-hooked), a continuation local storage package that wraps node async hooks. It allows us to locally store the trace ID for every session. But if you're using Node 14, this functionality is already built in with [async local storage](https://nodejs.org/api/async_hooks.html#async_hooks_class_asynclocalstorage). 
+Notice the `ns.set`. This is using [cls-hooked](https://www.npmjs.com/package/cls-hooked), a continuation local storage package that wraps node async hooks. It allows us to locally store the trace ID for every session. But if you're using Node 14, this functionality is already built in with [async local storage](https://nodejs.org/api/async_hooks.html#async_hooks_class_asynclocalstorage). What's cool about this method, though, is that it can be implemented in any language. 
 
 
-We then add an interceptor to our logging tool to add to every log line the race id from our session storage: 
+We then add an interceptor to the logging tool that grabs the trace ID from the session storage and adds it to every log line:
 
 ```javascript 
 function createBunyanStreamMiddleware(streams) {
@@ -92,7 +90,7 @@ function createBunyanStreamMiddleware(streams) {
 }
 ```
 
-Finally, we add an interceptor to our http tool to add the trace ID to the headers of the request before it is fired out.
+Finally, we add an interceptor to the http tool that adds the trace ID to the request headers before the request is fired out:
 
 ```javascript 
 function insertTracingHeaders(config = {}){
@@ -110,6 +108,7 @@ function insertTracingHeaders(config = {}){
     return config;
 }
 ```
+
 
 The entire flow will look something like this:
 
