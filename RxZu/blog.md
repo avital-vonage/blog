@@ -3,11 +3,11 @@
 In the beginning, all was linear. 
 
 We had in our hands an interface that allowed users to design conversations, entirely based on graphs. 
-This was part of the Vonage AI studio, where [some blurb on the studio]. The kicker? It was entirely based on forms. 
+This was part of the Vonage AI studio, where anyone can create it's own intelligent virtual assistant. The kicker? It was entirely based on forms. 
 
 But AI was the future, and forms, which our clients found unusable, most definitely were *not*. 
 
-## The Search for a Graphs Engine 
+## The Search for a Graphs Library 
 
 We realized we needed a visual approach to simplify the already complex world of conversation design. Something clever, snazzy, intuitive. 
 And for that, we needed a graphs library that would satisfy some requirements:
@@ -50,30 +50,75 @@ Install @rxzu/angular
 ```bash
 npm i @rxzu/angular
 ```
-Navigate to `./tsconfig.json` and change `"strict": true` to `"strict": false`, sadly we don't yet support this and it will introduce some generics typings issues. 
-**rest assured this is a work in progress.**
 
 Run the application
 ```bash
 ng s
 ```
-
-Add to `app.module.ts` RxZu module
+Let's enable production mode for `RxZu` in `main.ts`
 ```javascript
-import { BrowserModule } from '@angular/platform-browser';
+import { enableProdMode } from '@angular/core';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+
+import { AppModule } from './app/app.module';
+import { environment } from './environments/environment';
+import { enableDiagramProdMode } from '@rxzu/angular';
+
+if (environment.production) {
+  enableProdMode();
+  enableDiagramProdMode();
+}
+
+platformBrowserDynamic()
+  .bootstrapModule(AppModule)
+  .catch((err) => console.error(err));
+```
+
+Add to `app.module.ts` RxZu module along with all the default component.
+```javascript
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import {
+  ComponentProviderOptions,
+  DefaultLabelComponent,
+  DefaultLinkComponent,
+  DefaultNodeComponent,
+  DefaultPortComponent,
+  RxZuModule,
+} from '@rxzu/angular';
 
 import { AppComponent } from './app.component';
-import { RxZuDiagramsModule } from '@rxzu/angular';
+
+const DEFAULTS: ComponentProviderOptions[] = [
+  {
+    type: 'node',
+    component: DefaultNodeComponent,
+  },
+  {
+    type: 'port',
+    component: DefaultPortComponent,
+  },
+  {
+    type: 'link',
+    component: DefaultLinkComponent,
+  },
+  {
+    type: 'label',
+    component: DefaultLabelComponent,
+  },
+];
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, RxZuDiagramsModule],
+  imports: [BrowserModule, CommonModule, RxZuModule.withComponents(DEFAULTS)],
   providers: [],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
 ```
+
+RxZu module `withComponents` method accepts an array of components and their type, this way the library can resolve and paint the different components when added to the diagram model which we'll create later in the tutorial.
 
 Now let's create a cool stylish grid as our background, the draggable nodes and our action bar container
 `app.component.scss`
@@ -134,7 +179,7 @@ Now let's create a cool stylish grid as our background, the draggable nodes and 
 
 ```
 
-Our html template
+Our html template with the actions bar and the diagram itself.
 `app.component.html`
 ```html
 <div class="action-bar">
@@ -142,79 +187,68 @@ Our html template
     *ngFor="let node of nodesLibrary"
     class="node-drag"
     draggable="true"
-    [attr.data-type]="node.type"
+    [attr.data-name]="node.name"
     (dragstart)="onBlockDrag($event)"
     [ngStyle]="{ 'background-color': node.color }"
   >
-    {{ node.type }}
+    {{ node.name }}
   </div>
 </div>
 
-<ngdx-diagram
+<rxzu-diagram
   class="demo-diagram"
   [model]="diagramModel"
   (drop)="onBlockDropped($event)"
   (dragover)="$event.preventDefault()"
-></ngdx-diagram>
-
+></rxzu-diagram>
 ```
 
 And for the last piece in the puzzle, create some nodes, ports, link them up and render it all.
 `app.component.ts`
 ```js
-import { Component, OnInit } from '@angular/core';
-import { DiagramEngine } from '@rxzu/angular';
-import { DiagramModel, DefaultNodeModel } from '@rxzu/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import {
+  DiagramModel,
+  NodeModel,
+  PortModel,
+  RxZuDiagramComponent,
+} from '@rxzu/angular';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements AfterViewInit {
   diagramModel: DiagramModel;
-  nodesDefaultDimensions = { height: 200, width: 200 };
   nodesLibrary = [
-    { color: '#AFF8D8', type: 'greenish' },
-    { color: '#FFB5E8', type: 'pinkish' },
-    { color: '#85E3FF', type: 'blueish' },
+    { color: '#AFF8D8', name: 'default' },
+    { color: '#FFB5E8', name: 'default' },
+    { color: '#85E3FF', name: 'default' },
   ];
+  @ViewChild(RxZuDiagramComponent, { static: true })
+  diagram?: RxZuDiagramComponent;
 
-  constructor(private diagramEngine: DiagramEngine) {}
+  constructor() {
+    this.diagramModel = new DiagramModel();
+  }
 
-  ngOnInit() {
-    this.diagramEngine.registerDefaultFactories();
-    this.diagramModel = this.diagramEngine.createModel();
-
-    const node1 = new DefaultNodeModel({ id: '1' });
-    node1.setCoords({ x: 500, y: 300 });
-    node1.setDimensions(this.nodesDefaultDimensions);
-    node1.addOutPort({ name: 'outport1', id: 'outport1' });
-    node1.addOutPort({ name: 'outport2', id: 'outport2' });
-    const outport3 = node1.addOutPort({ name: 'outport3', id: 'outport3' });
-
-    const node2 = new DefaultNodeModel();
-    node2.setCoords({ x: 1000, y: 0 });
-    node2.setDimensions(this.nodesDefaultDimensions);
-    const inport = node2.addInPort({ name: 'inport2' });
-
-    const link = outport3.link(inport);
-    link.setLocked();
-
-    this.diagramModel.addAll(node1, node2, link);
-    this.diagramModel.getDiagramEngine().zoomToFit();
+  ngAfterViewInit() {
+    this.diagram?.zoomToFit();
   }
 
   createNode(type: string) {
-    const nodeData = this.nodesLibrary.find((nodeLib) => nodeLib.type === type);
-    const node = new DefaultNodeModel({ color: nodeData.color });
+    const nodeData = this.nodesLibrary.find((nodeLib) => nodeLib.name === type);
+    if (nodeData) {
+      const node = new NodeModel();
+      const port = new PortModel();
+      node.addPort(port);
+      node.setExtras(nodeData);
 
-    node.setExtras(nodeData);
-    node.setDimensions(this.nodesDefaultDimensions);
-    node.addOutPort({ name: 'outport1', id: 'outport1' });
-    node.addOutPort({ name: 'outport2', id: 'outport2' });
+      return node;
+    }
 
-    return node;
+    return null;
   }
 
   /**
@@ -222,52 +256,58 @@ export class AppComponent implements OnInit {
    */
   onBlockDrag(e: DragEvent) {
     const type = (e.target as HTMLElement).getAttribute('data-type');
-    e.dataTransfer.setData('type', type);
+    if (e.dataTransfer && type) {
+      e.dataTransfer.setData('type', type);
+    }
   }
 
   /**
    * on block dropped, create new intent with the empty data of the selected block type
    */
   onBlockDropped(e: DragEvent): void | undefined {
-    const nodeType = e.dataTransfer.getData('type');
-    const node = this.createNode(nodeType);
-    const droppedPoint = this.diagramEngine
-      .getMouseManager()
-      .getRelativePoint(e);
+    if (e.dataTransfer) {
+      const nodeType = e.dataTransfer.getData('type');
+      const node = this.createNode(nodeType);
+      const canvasManager = this.diagram?.diagramEngine.getCanvasManager();
+      if (canvasManager) {
+        const droppedPoint = canvasManager.getZoomAwareRelativePoint(e);
+        const width = node?.getWidth() ?? 1;
+        const height = node?.getHeight() ?? 1;
+        const coords = {
+          x: droppedPoint.x - width / 2,
+          y: droppedPoint.y - height / 2,
+        };
 
-    const coords = {
-      x: droppedPoint.x - this.nodesDefaultDimensions.width / 2,
-      y: droppedPoint.y - this.nodesDefaultDimensions.height / 2,
-    };
-
-    node.setCoords(coords);
-    this.diagramModel.addNode(node);
+        if (node) {
+          node.setCoords(coords);
+          this.diagramModel.addNode(node);
+        }
+      }
+    }
   }
 }
-
 ```
 We want to believe the code is self explanatory, but i'll do a quick overview nevertheless.
 
-```js
-this.diagramEngine.registerDefaultFactories();
+the `diagramModel` is our most important part, it hold the entire diagram model (duh), and in order to add or remove elements from the diagram we work on the model.
+
+```javascript
+this.diagramModel.addNode(node);
 ```
-As the name states, registers all default factories provided out of the box by RxZu as a starting point, their source code can be found at https://github.com/Vonage/rxzu/tree/main/packages/angular/src/lib/defaults/components and it is highly recommended to overview it when moving forward into fully customized entities.
 
-```js
-const node1 = new DefaultNodeModel();
-node1.setCoords({ x: 500, y: 300 });
-node1.setDimensions(nodesDefaultDimensions);
-const outport1 = node1.addOutPort({ name: 'outport1' });
+some entities are children of others, such as ports which are the children nodes.
+and can be added by directly attaching them to their parent.
+```javascript
+const port = new PortModel();
+node.addPort(port);
 ```
-Instantiating a node entity, which in turn generates the node component and exposes the model for us to manipulate it, update the coordinates, change the dimensions, create outport that is also an entity that instantiates behind the scenes and have lots of manipulations of their own.
+In the next tutorial I'll show how to create customized nodes, that utilize the extra information passed to them.
 
-I'll stop here, there's plenty more to do and show using RxZu and this is probably the first of many posts about RxZu.
-
-You can find the source code at our [GitHub](https://github.com/Vonage/rxzu), and read the doc’s and stories at our [Storybook](https://vonage.github.io/rxzu)
-
+Till then you can find many more examples at our [Storybook](https://vonage.github.io/rxzu), and the source code at our [GitHub](https://github.com/Vonage/rxzu)
 
 #### What the future holds for us?
 One of the most important tasks we have ahead is getting better performance in the core.
 Adding support for React, Vue, and more...
 Smarter links with obstacles awareness.
-Improving the documentation.
+Rendering only elements in view port to support gigantic diagrams (thousands of entities)
+And much more....
