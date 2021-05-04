@@ -27,9 +27,10 @@ So we created RxZu, named for Reactive Extensions ([RxJS](http://reactivex.io/))
 
 RxZu is a diagrams engine system, built on top of RxJS, that takes the  graphic visualization to the next level in terms of performance, optimization, and customizability.
 
-RxZu is composed of multiple parts: the core engine, which is in charge of handling the models and the synchronization between them, and the rendering engine which handles the rendering, and is based on the desired framework utilizing the core engine.
+RxZu is composed of multiple parts: the core engine, which is in charge of handling the synchronization between models, and the rendering engine  - all based on the desired framework utilizing the core engine. TODO 
 
-Some of the leading guidelines in the project are minimal, clean code and the ability for customizations and extendibility of the engine entities which are: 
+Some of the leading guidelines in the project are minimal. They are about clean code and the ability for customizations and extendibility of the engine entities. 
+These entities are made up of:  
 * Nodes, the main building block of any graph, are the visual representation of data intersections.
 * Ports, links got to start from some point.
 * Links, symbols of connectivity and continuity.
