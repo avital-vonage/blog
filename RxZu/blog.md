@@ -37,18 +37,21 @@ These entities are made up of:
 * Labels: the name or description of an entity 
 * Custom: the ability to create a custom entity, for example, a sticky note 
 
-#### Let's See the Code
-**RxZu currently only implements Angular as a rendering engine, which means all code examples are for Angular.**
 
 ![Alt Text](https://github.com/Vonage/rxzu/raw/main/assets/draganddropexample.gif)
-We'll begin by creating a new Angular application that will display a graph with a drag and drop interface to add more nodes.
+
+## Let's See the Code
+> RxZu currently only implements Angular as a rendering engine, which means all code examples are for Angular
+
+We'll begin by creating a new Angular application that will display a graph with a drag and drop interface to add more nodes:
 
 ```bash
 ng new rxzu-angular
 # wait for angular installation to finish
 cd rxzu-angular
 ```
-Install @rxzu/angular
+Install @rxzu/angular:
+
 ```bash
 npm i @rxzu/angular
 ```
@@ -317,7 +320,7 @@ In the next tutorial you'll learn how to create customized nodes that utilize an
 
 Until then, you can find many more examples in our [Storybook](https://vonage.github.io/rxzu), and the source code in our [GitHub repo](https://github.com/Vonage/rxzu).
 
-#### Where do we go from here? 
+## Where do we go from here? 
 
 The most important task on our roadmap is about building better performance in the core.
 And also: 
