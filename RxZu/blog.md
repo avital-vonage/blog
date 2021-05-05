@@ -27,21 +27,22 @@ So we created RxZu, named for Reactive Extensions ([RxJS](http://reactivex.io/))
 
 RxZu is a diagrams engine system, built on top of RxJS, that takes the  graphic visualization to the next level in terms of performance, optimization, and customizability.
 
-RxZu is composed of multiple parts: the core engine, which is in charge of handling the synchronization between models, and the rendering engine  - all based on the desired framework utilizing the core engine. TODO 
+RxZu is composed of multiple parts: the core engine, which is in charge of handling the synchronization between models, and the rendering engine that is based on the framework utilizing the core engine.  
 
 Some of the leading guidelines in the project are minimal. They are about clean code and the ability for customizations and extendibility of the engine entities. 
 These entities are made up of:  
-* Nodes, the main building block of any graph, are the visual representation of data intersections.
-* Ports, links got to start from some point.
-* Links, symbols of connectivity and continuity.
-* Labels, one might want to give a name to a link or even use it for links actions buttons
-* Custom, want to add your entity? no problem.
+* Nodes: the main building block of any graph; the visual representation of data convergence 
+* Ports: the starting points for the links
+* Links: a line between two ports, representing connectivity and continuity
+* Labels: the name or description of an entity 
+* Custom: the ability to create a custom entity, for example, a sticky note 
 
-#### Enough talking, let's code
-**RxZu currently only implements Angular as a rendering engine therefor all code examples are for Angular.**
+#### Let's See the Code
+**RxZu currently only implements Angular as a rendering engine, which means all code examples are for Angular.**
 
 ![Alt Text](https://github.com/Vonage/rxzu/raw/main/assets/draganddropexample.gif)
-Let's start by creating a new Angular application, that will display a graph and have a drag n' drop interface to add more nodes.
+We'll begin by creating a new Angular application that will display a graph with a drag and drop interface to add more nodes.
+
 ```bash
 ng new rxzu-angular
 # wait for angular installation to finish
@@ -52,7 +53,8 @@ Install @rxzu/angular
 npm i @rxzu/angular
 ```
 
-Run the application
+Run the application:
+
 ```bash
 ng s
 ```
@@ -75,7 +77,8 @@ platformBrowserDynamic()
   .catch((err) => console.error(err));
 ```
 
-Add to `app.module.ts` RxZu module along with all the default component.
+Add to `app.module.ts` RxZu module along with all the default component:
+
 ```javascript
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
@@ -119,9 +122,10 @@ const DEFAULTS: ComponentProviderOptions[] = [
 export class AppModule {}
 ```
 
-RxZu module `withComponents` method accepts an array of components and their type, this way the library can resolve and paint the different components when added to the diagram model which we'll create later in the tutorial.
+RxZu module `withComponents` method accepts an array of components and their type. This way the library can resolve and paint the different components when added to the diagram model, which we'll create below.
 
-Now let's create a cool stylish grid as our background, the draggable nodes and our action bar container
+Now let's create a cool grid as our background, the draggable nodes, and our action bar container:
+
 `app.component.scss`
 ```scss
 .demo-diagram {
@@ -180,7 +184,8 @@ Now let's create a cool stylish grid as our background, the draggable nodes and 
 
 ```
 
-Our html template with the actions bar and the diagram itself.
+Then, our html template with the actions bar and the diagram itself:
+
 `app.component.html`
 ```html
 <div class="action-bar">
@@ -204,7 +209,8 @@ Our html template with the actions bar and the diagram itself.
 ></rxzu-diagram>
 ```
 
-And for the last piece in the puzzle, create some nodes, ports, link them up and render it all.
+And for the last piece in the puzzle, create some nodes and ports, and link them up. Then render it all. 
+
 `app.component.ts`
 ```js
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
@@ -288,27 +294,34 @@ export class AppComponent implements AfterViewInit {
   }
 }
 ```
-We want to believe the code is self explanatory, but i'll do a quick overview nevertheless.
 
-the `diagramModel` is our most important part, it hold the entire diagram model (duh), and in order to add or remove elements from the diagram we work on the model.
+### Finally 
+
+Some things to note: 
+
+The `diagramModel` is the most important part. It holds the entire diagram model, and gives us the ability to add or remove elements from the diagram.
 
 ```javascript
 this.diagramModel.addNode(node);
 ```
 
-some entities are children of others, such as ports which are the children nodes.
-and can be added by directly attaching them to their parent.
+Some entities are children of others, such as ports (which are child nodes).
+They can be added by directly attaching them to their parent.
+
 ```javascript
 const port = new PortModel();
 node.addPort(port);
 ```
-In the next tutorial I'll show how to create customized nodes, that utilize the extra information passed to them.
 
-Till then you can find many more examples at our [Storybook](https://vonage.github.io/rxzu), and the source code at our [GitHub](https://github.com/Vonage/rxzu)
+In the next tutorial you'll learn how to create customized nodes that utilize any extra information they receive.
 
-#### What the future holds for us?
-One of the most important tasks we have ahead is getting better performance in the core.
-Adding support for React, Vue, and more...
-Smarter links with obstacles awareness.
-Rendering only elements in view port to support gigantic diagrams (thousands of entities)
-And much more....
+Until then, you can find many more examples in our [Storybook](https://vonage.github.io/rxzu), and the source code in our [GitHub repo](https://github.com/Vonage/rxzu).
+
+#### Where do we go from here? 
+
+The most important task on our roadmap is about building better performance in the core.
+And also: 
+- Adding support for React, Vue, and more...
+- Smarter links with obstacle awareness 
+- Rendering only elements in the view port to support gigantic diagrams (thousands of entities)
+
